@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% block title %}Team - Test&Lab{% endblock %}
+{% load staticfiles %}
+{% block custom_bread %}
+    <section>
+        <div class="wp">
+            <ul  class="crumbs">
+                <li><a href="/">Home</a>></li>
+                <li>Team</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+
+{% block content %}
+<section>
+	<div class="wp butler_list_box list">
+	<div class='left'>
+		<div class="listoptions">
+			<ul>
+				<li>
+					<h2>Team类型</h2>
+					<div class="cont">
+                            <a href="?location={{ location_id }}"><span class="{% ifequal category '' %}active2{% endifequal %}">全部</span></a>
+                                                                            <!--category是后台render过来的-->
+                            <a href="?category=develop&location={{ location_id }}"><span class="{% ifequal category 'develop' %}active2{% endifequal %}">研发</span></a>
+
+                            <a href="?category=test&location={{ location_id }}"><span class="{% ifequal category 'test' %}active2{% endifequal %}">测试</span></a>
+					</div>
+				</li>
+				<li>
+					<h2>所在地区</h2>
+{#					<div class="more">更多</div>#}
+					<div class="cont">
+                        <a href="?category={{ category }}"><span class="{% ifequal location_id '' %}active2{% endifequal %}">全部</span></a>
+                                {% for location in all_locations %}                              <!--后台通过render传过来的city_id是字符串类型，city.id是int类型-->
+                                    <a href="?location={{ location.id }}&category={{ category }}"><span class="{% ifequal location_id location.id|stringformat:'i' %}active2{% endifequal %}">{{ location.name }}</span></a>
+                                {% endfor %}  <!--用户在点击某个城市的时候会把这个城市的id（city.id）通过url以x=?的形式返回到后台view-->
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="all">共<span class="key">{{ team_nums }}</span>个</div>
+		<div class="butler_list company list">
+		 <div class="layout">
+			<div class="head">
+				<ul class="tab_header">
+					<li class="{% if sort == '' %}active{% endif %}"><a href="?category={{ category }}&location={{ location_id }}">全部</a> </li>
+					<li class="{% if sort == 'click_nums' %}active{% endif %}"><a href="?sort=click_nums&category={{ category }}&location={{ location_id }} ">点击数 &#8595;</a></li>
+					<li class="{% if sort == 'engineer_num' %}active{% endif %}"><a href="?sort=engineer_num&category={{ category }}&location={{ location_id }}">工程师人数 &#8595;</a></li>
+				</ul>
+			</div>
+            {% for team in all_teams.object_list %}
+                <dl class="des difdes">
+                    <dt>
+                        <a href="{% url 'org:team_home' team.id %}">
+                            <img width="200" height="120" class="scrollLoading" data-url="{{ MEDIA_URL }}{{ team.image }}"/>
+                        </a>
+                    </dt>
+                    <dd>
+                        <div class="clearfix">
+                             <a href="org-detail-homepage.html">
+                                 <h1>{{ team.name }}</h1>
+                                 <div class="pic fl">
+
+                                     <img src="{% static '/images/authentication.png' %}"/>
+
+                                     <img src="{% static '/images/gold.png' %}"/>
+
+                                 </div>
+                             </a>
+                        </div>
+                        <ul class="cont">
+                            <li class="first"><p class="pic9">设备数：<span>{{  team.equipment_num }}</span></p><p class="c7">工程师数：<span>{{ team.engineer_num }}</span></p></li>
+                            <li class="c8" style="padding-left:18px;">来自: {{  team.location }}</li>
+                            <li class="pic10" style="padding-left:18px;">类型：
+
+                                    <a href="/diary/19/">{{ team.category }}</a>
+
+{#                                    <a href="/diary/16/">数据库基础</a>#}
+
+                            </li>
+                        </ul>
+                    </dd>
+                    <div class="buy start_groupbuy jsShowPerfect2" data-id="22"><br/>联系<br/>服务</div>
+                </dl>
+{#                <tr>#}
+{#                    <td>{{ team.name }}</td>#}
+{#                    <td>{{ team.engineer_num }}</td>#}
+{#                </tr>#}
+            {% endfor %}
+		 </div>
+		 <div class="pageturn">
+            <ul class="pagelist">
+                {% if all_teams.has_previous %}<!--后台传过来的all_orgs是Page类型-->
+                    <li class="long"><a href="?{{ all_teams.previous_page_number.querystring }}">上一页</a></li>
+                {% endif %}
+
+                {% for page in all_teams.pages %}
+                    {% if page %}
+                        {% ifequal page all_teams.number %}<!--#Page对象all_orgs有一个number属性-->
+                            <li class="active"><a href="?{{ page.querystring }}">{{ page }}</a> </li>
+                        {% else %}
+                            <li><a href="?{{ page.querystring }}" class="page">{{ page }}</a></li>
+                        {% endifequal %}
+                    {% else %}
+                        <li class="none"><a href="">...</a> </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if all_teams.has_next %}
+                    <li class="long"><a href="?{{ all_teams.next_page_number.querystring }}" >下一页</a></li>
+                {% endif %}
+            </ul>
+        </div>
+		</div>
+	</div>
+	<div class="right companyright">
+			<div class="head">我要找设备</div>
+			<form class="rightform" id="jsStayForm">
+				<div>
+                    <img src="{% static '/images/rightform1.png' %}"/>
+                    <input type="text" name="name" id="companyName" placeholder="名字" maxlength="25" />
+                </div>
+				<div>
+                    <img src="{% static '/images/rightform2.png' %}"/>
+                    <input type="text" name="mobile" id="companyMobile" placeholder="联系电话"/>
+                </div>
+				<div>
+                    <img src="{% static '/images/rightform3.png' %}"/>
+                    <input type="text" name="equipment_name" id="companyAddress" placeholder="设备名" maxlength="50" />
+                </div>
+                <p class="error company-tips" id="jsCompanyTips"></p>
+				<input class="btn" type="text" id="jsStayBtn" value="立即咨询 >" />
+            {% csrf_token %}
+            </form>
+    </div>
+
+		<div class="right companyrank layout">
+			<div class="head">Team排名</div>
+                {% for team in hot_teams %}
+                <dl class="des">
+                    <dt class="num fl">{{ forloop.counter }}</dt>
+                    <dd>
+                        <a href="/company/2/"><h1>{{ team.name }}</h1></a>
+                        <p>{{ team.location }}</p>
+                    </dd>
+                </dl>
+                {% endfor %}
+		</div>
+        </div>
+</section>
+{% endblock %}
+
+
+{% block custom_js %}
+<script>
+    $(function(){
+        $(document).ready(function(){
+            $('#jsStayBtn').on('click', function(){
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: "{% url 'org:add_ask' %}",
+                    data: $('#jsStayForm').serialize(),
+                    async: true,
+                    success: function (data) {
+                        {#console.log(data)#}
+                        {#alert(data)#}
+                        if (data.status == 'success') {
+                            $('#jsStayForm')[0].reset();
+                            $('#jsCompanyTips').html('');
+                            alert("提交成功")
+                        } else if (data.status == 'fail') {
+                            $('#jsCompanyTips').html(data.msg)
+                        }
+                    },
+                });
+            });
+        });
+    })
+</script>
+{% endblock %}
+
+

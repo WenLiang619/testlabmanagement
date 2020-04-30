@@ -1,0 +1,82 @@
+{% extends 'org_base.html' %}
+{% block title %}Team首页 - Test&Lab{% endblock %}
+{% block right_form%}
+<div class="right companycenter layout grouping" >
+        <div class="head">
+            <h1>全部设备</h1>
+            <a class="green fr more" href="{% url 'org:team_equipment' team.id %}">查看更多  >  </a>
+        </div>
+        <div class="brief group_list">
+            {% for equipment in all_equipments %}
+            <div class="module1_5 box">
+                    <a href="{% url 'equipments:equipment_detail' equipment.id %}"><img width="214" src="{{ MEDIA_URL }}{{ equipment.image }}"/></a>
+                    <div class="des">
+                        <a href="{% url 'equipments:equipment_detail' equipment.id %} "><h2>{{ equipment.name }}</h2></a>
+                        <span class="fl">制造商：<i class="key">{{ equipment.manufacturer }}</i></span>
+                        <span class="fr">点击数：{{ equipment.click_nums }}</span>
+                    </div>
+                    <div class="bottom">
+                        <span class="fl">{{ equipment.team.name }}</span>
+                         <span class="star fr  notlogin
+                            " data-favid="13"  data-fav-type="4">
+                            {{ equipment.fav_nums }}
+                        </span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+<div class="right companycenter layout" >
+    <div class="head">
+        <h1>Team工程师</h1>
+        <a class="green fr more" href="{% url 'org:team_engineer' team.id %}">查看更多  >  </a>
+    </div>
+    {% for engineer in all_engineers %}
+        <div class="diarys">
+        <div class="module5 share company-diary-box" style="padding:10px 0;">
+            <div class="left">
+                <img class="pic" src="{{ MEDIA_URL }}{{ engineer.image }}"/>
+                <p>姓名：{{ engineer.name }}</p>
+            </div>
+            <div class="right">
+                <div class="top">
+                    <div class="fl">
+                        <a href=""><h1>专长：{{ engineer.expertise }}</h1></a>
+                        <span>职位：{{ engineer.work_position }}</span>
+                    </div>
+                </div>
+                <div class="middle" style="border-bottom:0;">{{ engineer.age }}岁</div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+<div class="right companycenter layout">
+    <div class="head">
+        <h1>Team介绍</h1>
+        <a class="green fr more" href="{% url 'org:team_desc' team.id %}">查看更多  >  </a>
+    </div>
+    <div class="cont">&nbsp;&nbsp;{{ team.desc }}<a href="/company/desc/22/"><span class="green">[查看更多]</span></a></div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

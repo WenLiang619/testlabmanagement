@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% block title %}设备列表 - Test&Lab{% endblock %}
+{% load staticfiles %}
+{% block custom_bread %}
+    <section>
+        <div class="wp">
+            <ul  class="crumbs">
+                <li><a href="{% url 'index' %}">首页</a>></li>
+                <li>设备</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+
+{% block content %}
+    <section>
+	<div class="wp">
+		<div class="list" style="margin-top:0;">
+			<div class="left layout">
+            <div class="listoptions">
+                <ul>
+{#                    <li>#}
+{#                        <h2>Team类型</h2>#}
+{#                        <div class="cont">#}
+{#                                <a href="?location={{ location_id }}"><span class="{% ifequal category '' %}active2{% endifequal %}">全部</span></a>#}
+{#                                                                                <!--category是后台render过来的-->#}
+{#                                <a href="?category=develop&location={{ location_id }}"><span class="{% ifequal category 'develop' %}active2{% endifequal %}">研发</span></a>#}
+{##}
+{#                                <a href="?category=test&location={{ location_id }}"><span class="{% ifequal category 'test' %}active2{% endifequal %}">测试</span></a>#}
+{#                        </div>#}
+{#                    </li>#}
+                    <li>
+                        <h2>Team</h2>
+    {#					<div class="more">更多</div>#}
+                        <div class="cont">
+                                <a href="?team_id="><span class="{% ifequal team_id '' %}active2{% endifequal %}">全部</span></a>
+                                    {% for team in all_teams %}                              <!--后台通过render传过来的city_id是字符串类型，city.id是int类型-->
+                                        <a href="?team_id={{ team.id }}"><span class="{% ifequal team_id team.id|stringformat:'i' %}active2{% endifequal %}">{{ team.name }}</span></a>
+                                    {% endfor %}  <!--用户在点击某个城市的时候会把这个城市的id（city.id）通过url以x=?的形式返回到后台view-->
+                        </div>
+                    </li>
+                </ul>
+		    </div>
+            <div class="all">共<span class="key">{{ equip_nums }}</span>个</div>
+				<div class="head">
+					<ul class="tab_header">
+{#                    <li class="{% if sort == '' %}active{% endif %}"><a href="?&ct={{ category }}&x={{ city_id }}">全部</a> </li>#}
+						<li {% if sort == '' %}class="active"{% endif %}><a href="?team_id={{ team_id }}">最新 </a></li><!--a标签把sort传到view,在get中获取，再render传回到li标签做判断-->
+						<li {% if sort == 'click_nums' %}class="active"{% endif %}><a href="?sort=click_nums&team_id={{ team_id }}">点击次数</a></li>
+						<li {% if sort == 'reserve_times' %}class="active"{% endif %}><a href="?sort=reserve_times&team_id={{ team_id }}">预定次数</a></li>
+					</ul>
+				</div>
+                <div id="inWindow">
+                    <div class="tab_cont " id="content">
+					<div class="group_list">
+                        {% for equipment in all_equipments.object_list %}   <!--后台CourseListView传来的all_courses不是QuerySet类型而是Page类型所以需要用到Page类型变量all_courses的object_list：<QuerySet [<Course: delphi>, <Course: 操作系统>, <Course: 数据结构>]>-->
+                            <div class="box">
+                                <a href="{% url 'equipments:equipment_detail' equipment.id %}"> <!-- 点击图片去到course-detail.html页面，course.id数据传到后台views.py中的CourseDetailView的get函数-->  <!--# 后台CourseListView传来的all_courses是Page类型： <Page 1 of 4>,它的object_list：<QuerySet [<Course: delphi>, <Course: 操作系统>, <Course: 数据结构>]>-->
+                                    <img width="280" height="350" class="scrollLoading" src="{{ MEDIA_URL }}{{ equipment.image }}"/>
+                                </a>
+{#                                <div class="des"><!-- 点击课程名字去到course-detail.html页面，course.id数据传到后台views.py中的CourseDetailView的get函数-->#}
+{#                                    <a href="{% url 'equipments:equipment_detail' equipment.id %}"><h2>{{ equipment.item }}-{{ equipment.name }}</h2></a>#}
+{#                                    <span class="f1">责任人：<i class="key">{{ equipment.responsible_person.name }}</i></span>#}
+{#                                    <h3>责任人：{{ equipment.responsible_person.name }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;状态：{{ equipment.status }}</h3>#}
+{#                                    <span class="fr">校验日期：{{ equipment.cal_date }}&nbsp;&nbsp;</span>#}
+{#                                </div>#}
+
+                                 <div class="des">
+                                     <a href="{% url 'equipments:equipment_detail' equipment.id %}"><h4>{{ equipment.item }} - {{ equipment.name }}&nbsp;&nbsp;|&nbsp;&nbsp;责任人：{{ equipment.responsible_person.name }}</h4></a>
+                                     <span class="fl">状态：<i class="key">{{ equipment.get_status_display }}</i></span>
+                                     <span class="fr">借用次数: {{ equipment.reserve_times }}</span>
+{#                                     <span class="fr">点击人数：{{ equipment.click_nums }}</span>#}
+                                        <div class="des">
+                                           <span class="fr">校验日期：{{ equipment.cal_date }}&nbsp;&nbsp;</span>
+                                        </div>
+                                 </div>
+
+                                <div class="bottom"><!-- 点击来自去到course-detail.html页面，course.id数据传到后台views.py中的CourseDetailView的get函数-->
+                                    <a href="{% url 'equipments:equipment_detail' equipment.id %}"><span class="fl">所属team：{{ equipment.team.name }}</span></a>
+                                    <span class="star fr  notlogin
+                                        " data-favid="15">
+                                        {{ equipment.fav_nums }}
+                                    </span>
+                                </div>
+                            </div>
+                        {% endfor %}
+					</div>
+                    <div class="pageturn">
+                        <ul class="pagelist">
+                            {% if all_equipments.has_previous %}<!--后台传过来的all_courses是Page类型-->
+                                <li class="long"><a href="?{{ all_equipments.previous_page_number.querystring }}">上一页</a></li>
+                            {% endif %}
+
+                            {% for page in all_equipments.pages %}
+                                {% if page %}
+                                    {% ifequal page all_equipments.number %}<!--Page对象all_courses有一个number属性-->
+                                        <li class="active"><a href="?{{ page.querystring }}">{{ page }}</a> </li>
+                                    {% else %}
+                                        <li><a href="?{{ page.querystring }}" class="page">{{ page }}</a></li>
+                                    {% endifequal %}
+                                {% else %}
+                                    <li class="none"><a href="">...</a> </li>
+                                {% endif %}
+                            {% endfor %}
+
+                                {% if all_equipments.has_next %}
+                                    <li class="long"><a href="?{{ all_equipments.next_page_number.querystring }}" >下一页</a></li>
+                                {% endif %}
+                        </ul>
+                     </div>
+				    </div>
+                </div>
+			</div>
+			<div class="right layout">
+				<div class="head">热门设备推荐</div>
+				<div class="group_recommend">
+                    {% for hot_equip in hot_equipments %}
+                    <dl>
+						<dt>
+							<a target="_blank" href="{% url 'equipments:equipment_detail' hot_equip.id %}">
+								<img width="240" height="220" class="scrollLoading" src="{{ MEDIA_URL }}{{ hot_equip.image }}"/>
+							</a>
+						</dt>
+						<dd>
+							<a target="_blank" href="{% url 'equipments:equipment_detail' hot_equip.id %}"><h2> {{ hot_equip.name }}</h2></a>
+							<span class="fl">状态：<i class="key">{{ hot_equip.get_status_display }}</i></span>
+						</dd>
+					</dl>
+                    {% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+    </section>
+{% endblock %}
+

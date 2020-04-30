@@ -1,0 +1,38 @@
+{% extends 'org_base.html' %}
+{% block title %}Team设备列表页{% endblock %}
+{% block page_path %}Team设备{% endblock %}
+{% block right_form%}
+<div class="right companycenter layout" >
+		<div class="head">
+			<h1>Team设备</h1>
+		</div>
+		<div class="brief group_list">
+            {% for equipment in all_equipments %}
+                <div class="module1_5 box">
+                    <a class="comp-img-box" href="{% url 'equipments:equipment_detail' equipment.id %}  ">
+                        <img  width="214" height="195" src="{{ MEDIA_URL }}{{ equipment.image }}"/>
+                    </a>
+                    <div class="des">
+                        <a href="{% url 'equipments:equipment_detail' equipment.id %}"><h2>{{ equipment.name }}</h2></a>
+                        <span class="fl">位置：<i class="key">{{ equipment.location }}</i></span>
+                        <span class="fr">下次校验日期：{{ equipment.next_cal_date }}</span>
+                    </div>
+                    <div class="bottom">
+                        <span class="fl">{{ equipment.team.name }}</span>
+                         <span class="star fr  notlogin
+                            " data-favid="13" data-fav-type="4">
+                            {{ equipment.fav_nums }}
+                        </span>
+                    </div>
+                </div>
+            {% endfor %}
+
+		</div>
+			<div class="pageturn">
+                <ul class="pagelist">
+                    <li class="active"><a href="?page=1">1</a></li>
+                </ul>
+            </div>
+	</div>
+{% endblock %}
+

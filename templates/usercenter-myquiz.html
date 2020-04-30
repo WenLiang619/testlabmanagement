@@ -1,0 +1,174 @@
+{% extends 'usercenter-base.html' %}
+{% block title %}我的答卷 - Test&Lab{% endblock %}
+{% load staticfiles %}
+
+{% block custom_bread %}
+    <section>
+        <div class="wp">
+            <ul  class="crumbs">
+                <li><a href="{% url 'index' %}">首页</a>></li>
+                <li><a href="/users/info/">个人中心</a>></li>
+                <li>我的答卷</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+
+{% block custom_css %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/muke/base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/muke/common-less.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/muke/course/learn-less.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static '/css/muke/course/course-comment.css' %}" />
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/muke/course/common-less.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/mooc.css' %}" />
+
+{#    <style type="text/css">#}
+{#             table tr td,th{#}
+{#                  border:1px solid #000;#}
+{#            }#}
+{#    </style>#}
+     <style type="text/css">
+        h1{
+           font-size:18px;
+           color: #291aff;
+           font-weight:bold;
+        }
+        h2{
+           font-size:16px;
+           color: #e49dff;
+           font-weight: bold;
+        }
+        #commenton{
+            font-family:"Microsoft Yahei";
+            font-size:20px;color: #1015a7;
+            line-height:2em;
+            text-align:left;
+        }
+        .btncal {
+            margin: 2px 0;
+            padding: 2px 3px;
+            vertical-align: middle;
+            font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
+            font-weight: bold;
+            font-size: 20px;
+        }
+         #jsSafetySubmitBtn{
+             cursor:pointer;
+             border:2px solid #7693cc;
+        }
+    </style>
+
+{% endblock %}
+{% block right_content %}
+    <div class="right" >
+		<div class="personal_des ">
+			<div class="head" style="border:4px solid #3623ea;text-align:center;">
+				 <h1>实验室安全培训后测试答卷</h1>
+			</div>
+			<div class="inforcon">
+				<form class="perinform" id="jsSafetySubmitForm" autocomplete="off">
+                    <ul class="">
+                        <br/>
+                        <label>1.实验室发生火灾后第一件事情应该是什么？</label><br/>
+                        <input type="radio" name="fistdoafterfire" value="跑到外面安全处"  />跑到外面安全处<br/>
+                        <input type="radio" name="fistdoafterfire" value="去救火"  />去救火<br/>
+                        <input type="radio" name="fistdoafterfire" value="去现场看看有没有需要帮忙的"  />去现场看看有没有需要帮忙的<br/>
+                        <input type="radio" name="fistdoafterfire" value="赶紧收自己的个人物品再跑出实验室"  />赶紧收自己的个人物品再跑出实验室<br/>
+                        <br/>
+                        <label>2.进入实验室必须要穿戴的防护用品有下面哪些?</label><br/>
+                        <input type="checkbox" name="mustware" value="安全鞋"  />安全鞋子
+                        <input type="checkbox" name="mustware" value="防护眼镜"  />防护眼镜
+                        <input type="checkbox" name="mustware" value="防静电衣"  />防静电衣
+                        <input type="checkbox" name="mustware" value="绝缘手套"  />绝缘手套
+                        <br/><br/>
+                        <label>3.实验室有多少个急停按钮?</label><br/>
+                        <img width="280" height="280"   src="{% static '/images/embtn.jpeg' %}"/>
+                        <br/>
+                        <input type="radio" name="embutton" value="5"  />5
+                        <input type="radio" name="embutton" value="8"  />8
+                        <input type="radio" name="embutton" value="12"  />12
+                        <input type="radio" name="embutton" value="11"  />11
+                        <br/><br/>
+                        <label>4.视频中有几处不符合实验室安全操作的事项?</label><br/>
+                            <div style="width:700px;height:675px; margin-left: 0px">
+                                <video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="1200"
+                                      poster="http://video-js.zencoder.com/oceans-clip.png"
+                                      data-setup="{}">
+                                    <source src="http://link.hhtjim.com/yyt/3298358.mp4" type='video/mp4'>
+                                </video>
+                            </div>
+                            <br/>
+                            <input type="radio" name="hmany" value="1"  />1
+                            <input type="radio" name="hmany" value="2"  />2
+                            <input type="radio" name="hmany" value="3"  />3
+                            <input type="radio" name="hmany" value="4"  />4
+                            <br/>
+
+                        <br/>
+                        <li class="btncal">
+                                <span type="button" id="jsSafetySubmitBtn" value="提交答卷" onclick ="marking_safety();">提交答卷</span>
+                        </li>
+                    </ul>
+                {% csrf_token %}
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block custom_js %}
+<script type="text/javascript">
+    function marking_safety(){
+        var score=0;
+            var answer = document.getElementsByName("fistdoafterfire");
+            if (answer[2].checked==true){
+                score+=1;
+            }
+            var answer = document.getElementsByName("mustware");
+            if (answer[0].checked==true && answer[1].checked==true ){
+                score+=1;
+            }
+            var answer = document.getElementsByName("embutton");
+            if (answer[2].checked==true){
+                score+=1;
+            }
+            {#alert('得分为：'+ score);#}
+            if (score>=2) {
+                {#alert("恭喜你通过测试。");#}
+                $.ajax({
+                    cache: false,
+                    type: 'POST',
+                    dataType: 'json',
+                    url:"{% url 'users:mytool_safety_quiz' %}",
+                    data:{'score':score},
+                    async: true,
+                    beforeSend:function(xhr, settings){xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");},
+                    success: function (data) {
+                        {#console.log(data)#}
+                        {#alert(data)#}
+                        if (data.status == 'success') {
+                            {#$('#jsStayForm')[0].reset();#}
+                            {#$('#jsCompanyTips').html('');#}
+                            alert("恭喜你通过测试，请到你的邮箱查看分数。");
+                            window.location.reload();//刷新当前页面.
+                        } else if (data.status == 'fail') {
+                            {#$('#jsCompanyTips').html(data.msg)#}
+                        }
+                    },
+                     error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        // 状态码
+                        alert(XMLHttpRequest.status); // 200
+                        alert(extStatus); // parsererror
+                        alert(errorThrown); // SyntaxError: Unexpected end of input
+                    }
+                        });
+            }
+            else{
+                alert("未通过，请重新参加培训并完成测试。");
+            }
+        }
+
+</script>
+{% endblock %}
+

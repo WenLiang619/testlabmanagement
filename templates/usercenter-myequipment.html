@@ -1,0 +1,73 @@
+{% extends 'usercenter-base.html' %}
+{% block title %}我的设备 - Test&Lab{% endblock %}
+
+{% block custom_bread %}
+    <section>
+        <div class="wp">
+            <ul  class="crumbs">
+                <li><a href="{% url 'index' %}">首页</a>></li>
+                <li><a href="{% url 'users:user_info' %}">个人中心</a>></li>
+                <li>我的设备</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+
+{% block right_content %}
+   <div class="right" >
+		<div class="personal_des Releasecont">
+			<div class="head">
+				<h1>我的设备</h1>
+			</div>
+		</div>
+		<div class="personal_des permessage">
+			<div class="companycenter">
+				<div class="group_list brief">
+{#                    {% for user_equipment in user_equipments %}#}
+{#                    <div class="module1_5 box">#}
+{#                            <a href="{% url 'equipments:equipment_detail' user_equipment.equipment.id %}">#}
+{#                                <img width="214" height="190" class="scrollLoading" src="{{ MEDIA_URL }}{{ user_equipment.equipment.image }}"/>#}
+{#                            </a>#}
+{#                            <div class="des">#}
+{#                                <a href="{% url 'equipments:equipment_detail' user_equipment.equipment.id %}"><h6>{{ user_equipment.equipment.item }}-{{ user_equipment.equipment.name }}&nbsp;&nbsp;|&nbsp;&nbsp;责任人：{{ equipment.responsible_person }}</h6></a>#}
+{#                                <span class="fl">状态：<i class="key">{{ user_equipment.equipment.status }}</i></span>#}
+{#                                <span class="fr">点击人数：{{ user_equipment.equipment.click_nums }}</span>#}
+{#                                    <div class="des">#}
+{#                                       <span class="fr">校验日期：{{ user_equipment.equipment.cal_date }}&nbsp;&nbsp;</span>#}
+{#                                    </div>#}
+{#                            </div>#}
+{#                            <div class="bottom">#}
+{#                                <span class="fl">{{ user_equipment.equipment.team.name }}</span>#}
+{#                                <span class="fl">{{ user_equipment.user.name }}</span>#}
+{#                                <span class="star fr  notlogin" data-favid="15">{{ user_equipment.equipment.fav_nums }}</span>#}
+{#                            </div>#}
+{#                    </div>#}
+{#                    {% endfor %}#}
+
+                    {% for equipment in equipments_list %}
+                    <div class="module1_5 box">
+                            <a href="{% url 'equipments:equipment_detail' equipment.id %}">
+                                <img width="214" height="190" class="scrollLoading" src="{{ MEDIA_URL }}{{ equipment.image }}"/>
+                            </a>
+                            <div class="des">
+                                <a href="{% url 'equipments:equipment_detail' equipment.id %}"><h6>{{ equipment.item }}-{{ equipment.name }}&nbsp;&nbsp;|&nbsp;&nbsp;责任人：{{ equipment.responsible_person }}</h6></a>
+                                <span class="fl">状态：<i class="key">{{ equipment.status }}</i></span>
+                                <span class="fr">点击人数：{{ equipment.click_nums }}</span>
+                                    <div class="des">
+                                       <span class="fr">校验日期：{{ equipment.cal_date }}&nbsp;&nbsp;</span>
+                                    </div>
+                            </div>
+                            <div class="bottom">
+                                <span class="fl">{{ equipment.team.name }}</span>
+                                <span class="fl">{{ equipment.get_last_borrow_user.user.nick_name }}</span>
+                                <span class="star fr  notlogin" data-favid="15">{{ equipment.fav_nums }}</span>
+                            </div>
+                    </div>
+                    {% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+

@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+{% block title %}设备评论 - Test&Lab{% endblock %}
+{% load staticfiles %}
+{% block custom_bread %}
+    <section>
+	<div class="wp">
+		<div class="crumbs">
+			<ul>
+				<li><a href="{% url 'index' %}">首页</a>></li>
+                <li><a href="{% url 'equipments:equipment_list' %}">设备列表</a>></li>
+				<li><a href="{% url 'equipments:equipment_detail' equipment.id %}">设备详情</a>></li>
+                <li>设备评论</li>
+			</ul>
+		</div>
+	</div>
+    </section>
+{% endblock %}
+
+{% block custom_css %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/muke/base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/muke/common-less.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/muke/course/learn-less.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static '/css/muke/course/course-comment.css' %}" />
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/muke/course/common-less.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/mooc.css' %}" />
+
+{% endblock %}
+
+{% block content %}
+   <div id="main">
+      <div class="course-infos">
+        <div class="w pr">
+            <div style="height: 15px" class="path">
+            </div>
+            <div class="hd">
+                <h2 class="l">{{ equipment.name }}</h2>
+            </div>
+            <div class="statics clearfix">
+                <div class="static-item ">
+                    <span class="meta-value"><strong>{{ equipment.get_status_display }} </strong></span>
+                    <span class="meta">状态</span>
+                    <em></em>
+                </div>
+                <div class="static-item static-time">
+                    <span class="meta-value">{{ equipment.cal_date }}</span>
+                    <span class="meta">校验日期</span>
+                    <em></em>
+                </div>
+                <div class="static-item">
+                    <span class="meta-value"><strong> {{ equipment.responsible_person }}</strong></span>
+                    <span class="meta">责任人</span>
+                    <em></em>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="course-info-main clearfix w has-progress">
+
+        <div class="info-bar clearfix">
+            <div class="content-wrap clearfix">
+                <div class="content">
+                    <div class="mod-tab-menu">
+                       <ul class="course-menu clearfix">
+                            <li><a id="learnOn"   {% if request.path|slice:'16' == '/equipments/info' %} class="ui-tabs-active active" {% endif %}  href="{% url 'equipments:equipment_info' equipment.id %} "><span>信息(视频)</span></a></li>
+                            <li><a id="commentOn" {% if request.path|slice:'19' == '/equipments/comment' %} class="active" {% endif %} href="{% url 'equipments:equipment_comments' equipment.id %} "><span>评论</span></a></li>
+                            <li><a id="ReserveOn"  {% if request.path|slice:'19' == '/equipments/reserve' %} class="active" {% endif %}  href="{% url 'equipments:equipment_reserve' equipment.id %}"><span>预定</span></a></li>
+{#                             <li><a class="ui-tabs-active active" id="learnOn"  href="{% url 'equipments:equipment_info' equipment.id %}"><span>信息(视频)</span></a></li>#}
+{#                           <li><a id="commentOn" class="active" href="{% url 'equipments:equipment_comments' equipment.id %}"><span>评论</span></a></li>#}
+                       </ul>
+                    </div>
+                    <!--发布评论-->
+                    <div id="js-pub-container" class="issques clearfix js-form">
+                        <div class="wgt-ipt-wrap pub-editor-wrap " id="js-pl-input-fake">
+                            <textarea id="js-pl-textarea" class="" placeholder="扯淡、吐槽、表扬、鼓励……想说啥就说啥！" ></textarea>
+                        </div>
+                        <input type="button" id="js-pl-submit" class="pub-btn" data-cid="452" value="发表评论">
+                        <p class="global-errortip js-global-error"></p>
+                    </div>
+                    <div id="course_note">
+                        {% for user_comments in all_comments.object_list %}
+                        <ul class="mod-post" id="comment-list">
+                            <li class="post-row">
+                                <div class="media">
+                                    <span target="_blank"><img src='{{ MEDIA_URL }}{{ user_comments.user.image }}' width='40' height='40' /></span>
+                                </div>
+                                <div class="bd">
+                                    <div class="tit">
+                                        <span target="_blank">{{ user_comments.user.username }}</span>
+                                    </div>
+                                    <p class="cnt">{{ user_comments.comments }}</p>
+                                    <div class="footer clearfix">
+                                        <span title="创建时间" class="l timeago">时间：{{ user_comments.add_time }}</span>
+                                    </div>
+                                </div>
+                             </li>
+                        </ul>
+                        {% endfor %}
+                    </div>
+                    <div class="pageturn pagerright">
+                        <ul class="pagelist">
+                            {% if all_comments.has_previous %}<!--后台传过来的all_orgs是Page类型-->
+                                <li class="long"><a href="?{{ all_comments.previous_page_number.querystring }}">上一页</a></li>
+                            {% endif %}
+
+                            {% for page in all_comments.pages %}
+                                {% if page %}
+                                    {% ifequal page all_comments.number %}<!--#Page对象all_orgs有一个number属性-->
+                                        <li class="active"><a href="?{{ page.querystring }}">{{ page }}</a> </li>
+                                    {% else %}
+                                        <li><a href="?{{ page.querystring }}" class="">{{ page }}</a></li>
+                                    {% endifequal %}
+                                {% else %}
+                                    <li class="none"><a href="">...</a> </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if all_comments.has_next %}
+                                <li class="long"><a href="?{{ all_comments.next_page_number.querystring }}" >下一页</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="aside r">
+                <div class="bd">
+                    <div class="box mb40">
+                        <h4>资料下载</h4>
+                        <ul class="downlist">
+                          {% for equipment_resource in all_resources %}<!--courses\views中的CourseInfoView传递all_resources（CourseResource）过来-->
+                            <li>
+                                <span ><i class="aui-iconfont aui-icon-file"></i>&nbsp;&nbsp; {{ equipment_resource.name }}</span>
+                                <a href="{{ MEDIA_URL }}{{ equipment_resource.download }} " class="downcode" target="_blank" download="" data-id="274" title="">下载</a>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="box mb40">
+                        <h4>设备责任人提示</h4>
+                        <div class="teacher-info">
+                            <a href="/u/315464/courses?sort=publish" target="_blank">
+                                <img src='{{ MEDIA_URL }}{{ equipment.responsible_person.image }} ' width='80' height='80' />
+                            </a>
+                                <span class="tit">
+                                  <a href="/u/315464/courses?sort=publish" target="_blank">{{ equipment.responsible_person.name }} </a>
+                                </span>
+                            <span class="job">{{ equipment.responsible_person.work_position }} </span>
+                        </div>
+                        <div class="course-info-tip">
+                            <dl class="first">
+                                <dt>设备须知</dt>
+                                <dd class="autowrap"> 后面设计取决要告诉用户什么</dd>
+                            </dl>
+                            <dl>
+                                <dt>工程师提示你</dt>
+                                <dd class="autowrap">注意安全，正规使用</dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="cp-other-learned  js-comp-tabs">
+                        <div class="cp-header clearfix">
+                            <h2 class="cp-tit l">你可能还需要使用的设备</h2>
+                        </div>
+                        <div class="cp-body">
+                            <div class="cp-tab-pannel js-comp-tab-pannel" data-pannel="course" style="display: block">
+                                <!-- img 200 x 112 -->
+                                <ul class="other-list">
+                                    {% for relate_equipment in relate_equipments %}
+                                    <li class="curr">
+                                        <a href="{% url 'equipments:equipment_detail' relate_equipment.id %} " target="_blank">
+                                            <img src="{{ MEDIA_URL }}{{ relate_equipment.image }} " alt="{{ relate_equipment.name }}">
+                                            <span class="name autowrap">{{ relate_equipment.name }}</span>
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="cp-tab-pannel js-comp-tab-pannel" data-pannel="plan">
+                                <ul class="other-list">
+                                    <li class="curr">
+                                        <a href="/course/programdetail/pid/31?src=sug" target="_blank">
+                                            <img src="http://img.mukewang.com/56551e6700018b0c09600720-240-135.jpg" alt="Java工程师">
+                                            <span class="name autowrap">Java工程师</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+     </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script type="text/javascript">
+    //添加评论
+    $('#js-pl-submit').on('click', function(){
+        var comments = $("#js-pl-textarea").val()
+        if(comments == ""){
+            alert("评论不能为空")
+            return
+        }
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url:"{% url 'equipments:add_comment' %}",
+            data:{'equipment_id':{{ equipment.id }}, 'comments':comments},//equipment是CommentsView传过来的
+            async: true, //equipment_id,comments要与AddCommentsView中从POST中取的参数名一致
+            beforeSend:function(xhr, settings){
+                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+            },
+            success: function(data) {
+                if(data.status == 'fail'){
+                    if(data.msg == '用户未登录'){
+                        window.location.href="/login/";
+                    }else{
+                        alert(data.msg)
+                    }
+
+                }else if(data.status == 'success'){
+                    window.location.reload();//刷新当前页面.
+                }
+            },
+        });
+    });
+
+</script>
+{% endblock %}
+
+
+
+

@@ -1,0 +1,362 @@
+{% extends 'usercenter-base.html' %}
+{% block title %}我的工具 - Test&Lab{% endblock %}
+{% load staticfiles %}
+
+{% block custom_bread %}
+    <section>
+        <div class="wp">
+            <ul  class="crumbs">
+                <li><a href="{% url 'index' %}">首页</a>></li>
+                <li><a href="/users/info/">个人中心</a>></li>
+                <li>我的工具</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+
+{% block custom_css %}
+    <link rel="stylesheet" type="text/css" href="{% static '/css/muke/base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/muke/common-less.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/muke/course/learn-less.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static '/css/muke/course/course-comment.css' %}" />
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/muke/course/common-less.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/mooc.css' %}" />
+
+    <style type="text/css">
+        h1{
+           font-size:18px;
+           color: #291aff;
+           font-weight:bold;
+        }
+        h2{
+           font-size:16px;
+           color: #e49dff;
+           font-weight: bold;
+        }
+        #commenton{
+            font-family:"Microsoft Yahei";
+            font-size:20px;color: #1015a7;
+            line-height:2em;
+            text-align:left;
+        }
+        .btncal{
+                margin: 2px 0;
+                padding: 2px 3px;
+                vertical-align: middle;
+                font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
+                font-weight: bold;
+                font-size: 20px;
+        }
+        #jsUcalBtn{
+             cursor:pointer;
+             border:2px solid #7693cc;
+        }
+        #jsUtcalBtn{
+            cursor:pointer;
+            border:2px solid #7693cc;
+        }
+    </style>
+
+{#    <style type="text/css">#}
+{#             table tr td,th{#}
+{#                  border:1px solid #000;#}
+{#            }#}
+{#    </style>#}
+{% endblock %}
+{% block right_content %}
+
+    <div class="right">
+		<div class="personal_des ">
+			<div class="head" style="border:4px solid #3623ea ;">
+				 <h1>直接测量量的不确定度计算</h1>
+			</div>
+			<div class="inforcon">
+				<form class="perinform" id="jsUcalForm" autocomplete="off">
+                    <div class="left" style="width:242px;">
+                        <P id="commenton">比如用keithley2700测量一个电学量或者用外用表测量一个电学量一次读数报结果。</P>
+				    </div>
+					<ul class="right">
+                        <h2>重复性引入的不确定度分量u(Ux)，请输入至少6次测量值</h2>
+						<li>测&nbsp;&nbsp;量&nbsp;&nbsp;值1：
+                            <input type="text" name="test_value1" id="test_value1" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="测量值1" maxlength="50" />
+                        </li>
+                        <i class="error-tips"></i>
+                        <li>测&nbsp;&nbsp;量&nbsp;&nbsp;值2：
+                            <input type="text" name="test_value2" id="test_value2" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="测量值2" maxlength="50" />
+                        </li>
+                        <i class="error-tips"></i>
+                        <li>测&nbsp;&nbsp;量&nbsp;&nbsp;值3：
+                            <input type="text" name="test_value3" id="test_value3" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="测量值3" maxlength="50" />
+                        </li>
+                        <i class="error-tips"></i>
+                        <li>测&nbsp;&nbsp;量&nbsp;&nbsp;值4：
+                            <input type="text" name="test_value4" id="test_value4" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="测量值4" maxlength="50" />
+                        </li>
+                        <i class="error-tips"></i>
+                        <li>测&nbsp;&nbsp;量&nbsp;&nbsp;值5：
+                            <input type="text" name="test_value5" id="test_value5" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="测量值5" maxlength="50" />
+                        </li>
+                        <i class="error-tips"></i>
+                        <li>测&nbsp;&nbsp;量&nbsp;&nbsp;值6：
+                            <input type="text" name="test_value6" id="test_value6" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="测量值6" maxlength="50" />
+                        </li>
+                        <i class="error-tips"></i>
+                        <li>测&nbsp;&nbsp;量&nbsp;&nbsp;值7：
+                            <input type="text" name="test_value7" id="test_value7" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="测量值7" maxlength="50" />
+                        </li>
+                        <li>测&nbsp;&nbsp;量&nbsp;&nbsp;值8：
+                            <input type="text" name="test_value8" id="test_value8" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="测量值8" maxlength="50" />
+                        </li>
+						<li>测&nbsp;&nbsp;量&nbsp;&nbsp;值9：
+                            <input type="text" name="test_value9" id="test_value9" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="测量值9" maxlength="50" />
+                        </li>
+                        <li>测&nbsp;&nbsp;量&nbsp;&nbsp;值10：
+                            <input type="text" name="test_value10" id="test_value10" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="测量值10" maxlength="50" />
+                        </li>
+                        <h2>仪器本身误差引入的不确定度分量u(Un)</h2>
+                             <h4>请输入读数值</h4>
+                            <li>读&nbsp;&nbsp;&nbsp;&nbsp;数：
+                                <input type="text" name="readout" id="readout" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="读数" maxlength="50" />
+                            </li>
+                             <h4>请输入量程</h4>
+                            <li>量&nbsp;&nbsp;&nbsp;&nbsp;程：
+                                <input type="text" name="range_value" id="range_value" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="量程" maxlength="50" />
+                            </li>
+                            <h4>查阅仪器手册找出此量程下的最大允许误差</h4>
+                            <li>最&nbsp;大&nbsp;允&nbsp;许&nbsp;误&nbsp;差&nbsp;：
+                                <input type="text" name="mpe" id="mpe" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="最大允许误差" maxlength="50" />
+                            </li>
+                            <h2>仪器分辨力引入的不确定度分量u(Ur)</h2>
+                            <h4>请输入此量程下的分辨力(率)</h4>
+                            <li>分&nbsp;&nbsp;辨&nbsp;&nbsp;力(率)：
+                                <input type="text" name="resolution" id="resolution" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,8})?/)"  placeholder="分辨力" maxlength="50" />
+                            </li>
+
+                        <li class="btncal">
+                            <span type="button" id="jsUcalBtn" value="开始计算">开始计算</span>
+						</li>
+					</ul>
+                {% csrf_token %}
+				</form>
+			</div>
+
+
+            <div class="head" style="border:4px solid #3623ea ;">
+				 <h1>温度测试的不确定度计算</h1>
+			</div>
+			<div class="inforcon">
+				<form class="perinform" id="jsUtcalForm" autocomplete="off">
+                    <div class="left" style="width:242px;">
+                        <P id="commenton">Keithley2700+PT1000测温。</P>
+				    </div>
+					<ul class="right">
+                        <h2>重复性引入的不确定度分量u(Ux)，请输入至少6次测量值</h2>
+						<li>测&nbsp;&nbsp;量&nbsp;&nbsp;值1：
+                            <input type="text" name="t_value1" id="t_value1" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="测量值1" maxlength="50" />
+                        </li>
+                        <i class="error-tips"></i>
+                        <li>测&nbsp;&nbsp;量&nbsp;&nbsp;值2：
+                            <input type="text" name="t_value2" id="t_value2" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="测量值2" maxlength="50" />
+                        </li>
+                        <i class="error-tips"></i>
+                        <li>测&nbsp;&nbsp;量&nbsp;&nbsp;值3：
+                            <input type="text" name="t_value3" id="t_value3" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="测量值3" maxlength="50" />
+                        </li>
+                        <i class="error-tips"></i>
+                        <li>测&nbsp;&nbsp;量&nbsp;&nbsp;值4：
+                            <input type="text" name="t_value4" id="t_value4" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="测量值4" maxlength="50" />
+                        </li>
+                        <i class="error-tips"></i>
+                        <li>测&nbsp;&nbsp;量&nbsp;&nbsp;值5：
+                            <input type="text" name="t_value5" id="t_value5" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="测量值5" maxlength="50" />
+                        </li>
+                        <i class="error-tips"></i>
+                        <li>测&nbsp;&nbsp;量&nbsp;&nbsp;值6：
+                            <input type="text" name="t_value6" id="t_value6" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="测量值6" maxlength="50" />
+                        </li>
+                        <i class="error-tips"></i>
+                        <li>测&nbsp;&nbsp;量&nbsp;&nbsp;值7：
+                            <input type="text" name="t_value7" id="t_value7" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="测量值7" maxlength="50" />
+                        </li>
+                        <li>测&nbsp;&nbsp;量&nbsp;&nbsp;值8：
+                            <input type="text" name="t_value8" id="t_value8" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="测量值8" maxlength="50" />
+                        </li>
+						<li>测&nbsp;&nbsp;量&nbsp;&nbsp;值9：
+                            <input type="text" name="t_value9" id="t_value9" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="测量值9" maxlength="50" />
+                        </li>
+                        <li>测&nbsp;&nbsp;量&nbsp;&nbsp;值10：
+                            <input type="text" name="t_value10" id="t_value10" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="测量值10" maxlength="50" />
+                        </li>
+                            <h2>PT1000本身误差引入的不确定度分量u(Un)</h2>
+                            <h4>请输入读数值(度)</h4>
+                            <li>读&nbsp;&nbsp;&nbsp;&nbsp;数：
+                                <input type="text" name="t_readout" id="t_readout" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,6})?/)"  placeholder="读数" maxlength="50" />
+                            </li>
+                            <h2>引线电阻值引入的不确定度分量u(Ur)</h2>
+                            <h4>请输入引线电阻值(欧姆)</h4>
+                            <li>电&nbsp;&nbsp;阻：
+                                <input type="text" name="resistor" id="resistor" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,8})?/)"  placeholder="阻值" maxlength="50" />
+                            </li>
+                            <h2>程序转换引入的不确定度分量u(Us)</h2>
+                            <h4>测量范围内的最大温度差值(Keithley2700测得值-LabSYS显示值)</h4>
+                            <li>温&nbsp;&nbsp;差：
+                                <input type="text" name="t_max" id="t_max" onkeyup="this.value=this.value.toString().match(/^\d+(?:\.\d{0,8})?/)"  placeholder="温差" maxlength="50" />
+                            </li>
+
+                        <li class="btncal">
+                            <span type="button" id="jsUtcalBtn" value="开始计算">开始计算</span>
+						</li>
+					</ul>
+                {% csrf_token %}
+				</form>
+			</div>
+		</div>
+	</div>
+
+{#		</div>#}
+{% endblock %}
+
+{% block custom_js %}
+<script type="text/javascript">
+     //直接测量量的不确定度计算
+ $('#jsUcalBtn').on('click', function(){
+        {#alert('按键响应成功！')#}
+        var _self = $(this),
+            $jsUcalForm = $('#jsUcalForm')
+            verify = verifySubmit(
+            [
+                {id: '#test_value1', tips: Dml.Msg.epTestValue1, require: true},
+                {id: '#test_value2', tips: Dml.Msg.epTestValue2, require: true},
+                {id: '#test_value3', tips: Dml.Msg.epTestValue3, require: true},
+                {id: '#test_value4', tips: Dml.Msg.epTestValue4, require: true},
+                {id: '#test_value5', tips: Dml.Msg.epTestValue5, require: true},
+                {id: '#test_value6', tips: Dml.Msg.epTestValue6, require: true},
+
+                {id: '#readout', tips: Dml.Msg.epReadout, require: true},
+                {id: '#range_value', tips: Dml.Msg.epRange_value, require: true},
+                {id: '#resolution', tips: Dml.Msg.epResolution, require: true},
+                {id: '#mpe', tips: Dml.Msg.epMpe, require: true},
+            ]
+        );
+        if(!verify){
+            alert('请至少输入前6个测量值。读数、所用仪器量程及此量程下的分辨力和最大允许误差必填！')
+           return;
+        }
+        $.ajax({
+            cache: false,
+            type: 'post',
+            dataType: 'json',
+            url:"/users/mytool/u_cal/",
+            data:$jsUcalForm.serialize(),
+            async: true,
+            beforeSend:function(XMLHttpRequest){
+                _self.val("计算中...");
+                _self.attr('disabled',true);
+            },
+            success: function(data) {
+                if(data.test_value1){
+                    _showValidateError($('#test_value1'), data.test_value1);
+                }else if(data.test_value2){
+                   _showValidateError($('#test_value2'), data.test_value2);
+                }else if(data.test_value3){
+                   _showValidateError($('#test_value3'), data.test_value3);
+                }else if(data.test_value4){
+                   _showValidateError($('#test_value4'), data.test_value4);
+                }else if(data.test_value5){
+                   _showValidateError($('#test_value5'), data.test_value5);
+                }else if(data.test_value6){
+                   _showValidateError($('#test_value6'), data.test_value6);
+                }else if(data.status == "failure"){
+                     Dml.fun.showTipsDialog({
+                        title: '失败',
+                        h2: data.msg
+                    });
+                }else if(data.status == "success"){
+                    Dml.fun.showTipsDialog({
+                        title: '成功',
+                        h2: '计算成功！请查收你的邮箱获取计算结果。'
+                    });
+                    setTimeout(function(){window.location.href = window.location.href;},1500);
+                    {#alert('请查收你的邮箱获取计算结果。');#}
+                }
+            },
+            complete: function(XMLHttpRequest){
+                _self.val("开始计算");
+                _self.removeAttr("disabled");
+            }
+        });
+    });
+
+     //PT1000温度测试的不确定度计算
+ $('#jsUtcalBtn').on('click', function(){
+        {#alert('按键响应成功！')#}
+        var _self = $(this),
+            $jsUtcalForm = $('#jsUtcalForm')
+            verify = verifySubmit(
+            [
+                {id: '#t_value1', tips: Dml.Msg.epT_value1, require: true},
+                {id: '#t_value2', tips: Dml.Msg.epT_value2, require: true},
+                {id: '#t_value3', tips: Dml.Msg.epT_value3, require: true},
+                {id: '#t_value4', tips: Dml.Msg.epT_value4, require: true},
+                {id: '#t_value5', tips: Dml.Msg.epT_value5, require: true},
+                {id: '#t_value6', tips: Dml.Msg.epT_value6, require: true},
+
+                {id: '#t_readout', tips: Dml.Msg.epT_readout, require: true},
+                {id: '#resistor', tips: Dml.Msg.epResistor, require: true},
+                {id: '#t_max', tips: Dml.Msg.epT_max, require: true},
+            ]
+        );
+        if(!verify){
+            alert('请至少输入前6个测量值。本次读数、引线阻值及测温范围里的软件转换最大温差必填！')
+           return;
+        }
+        $.ajax({
+            cache: false,
+            type: 'post',
+            dataType: 'json',
+            url:"{% url 'users:mytool_ut_cal' %}",
+            data:$jsUtcalForm.serialize(),
+            async: true,
+            beforeSend:function(XMLHttpRequest){
+                _self.val("计算中...");
+                _self.attr('disabled',true);
+            },
+            success: function(data) {
+                if(data.t_value1){
+                    _showValidateError($('#t_value1'), data.t_value1);
+                }else if(data.t_value2){
+                   _showValidateError($('#t_value2'), data.t_value2);
+                }else if(data.t_value3){
+                   _showValidateError($('#t_value3'), data.t_value3);
+                }else if(data.t_value4){
+                   _showValidateError($('#t_value4'), data.t_value4);
+                }else if(data.t_value5){
+                   _showValidateError($('#t_value5'), data.t_value5);
+                }else if(data.t_value6){
+                   _showValidateError($('#t_value6'), data.t_value6);
+                }else if(data.status == "failure"){
+                     Dml.fun.showTipsDialog({
+                        title: '失败',
+                        h2: data.msg
+                    });
+                }else if(data.status == "success"){
+                    {#Dml.fun.showTipsDialog({#}
+                    {#    title: '成功',#}
+                    {#    h2: '计算成功！',#}
+                    //{#});#}
+                    alert('计算成功！请查收你的邮箱获取计算结果。');
+                    setTimeout(function(){window.location.href = window.location.href;},1500);
+
+                }
+            },
+            complete: function(XMLHttpRequest){
+                _self.val("开始计算");
+                _self.removeAttr("disabled");
+            }
+        });
+    });
+
+</script>
+{% endblock %}
+

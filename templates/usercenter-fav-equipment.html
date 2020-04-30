@@ -1,0 +1,58 @@
+{% extends 'usercenter-base.html' %}
+{% block title %}我的收藏设备 - Test&Lab{% endblock %}
+{% load staticfiles %}
+{% block custom_bread %}
+    <section>
+        <div class="wp">
+            <ul  class="crumbs">
+                <li><a href="{% url 'index' %}">首页</a>></li>
+                <li><a href="{% url 'users:user_info' %}">个人中心</a>></li>
+                <li>我收藏的设备</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+
+{% block right_content %}
+    <div class="right" >
+            <div class="personal_des Releasecont">
+                <div class="head">
+                    <h1>我的收藏</h1>
+                </div>
+            </div>
+            <div class="personal_des permessage">
+                <div class="head">
+                    <ul class="tab_header messagehead">
+                        <li><a href="{% url 'users:myfav_team' %}">测试小组</a> </li>
+                        <li><a href="{% url 'users:myfav_engineer' %}">工程师 </a></li>
+                        <li class="active"><a href="{% url 'users:myfav_equipment' %}">我的设备</a></li>
+                    </ul>
+                </div>
+                <div class="companycenter">
+                    <div class="group_list brief">
+                        {% for fav_equipment in equipment_list %}
+                        <div class="module1_5 box">
+                            <a href="{% url 'equipments:equipment_detail' fav_equipment.id %}">
+                                <img width="214" height="190" src="{{ MEDIA_URL }}{{ fav_equipment.image }}"/>
+                            </a>
+                            <div class="des">
+                                <a href="{% url 'equipments:equipment_detail' fav_equipment.id %}"><h6>{{ fav_equipment.item }}-{{ fav_equipment.name }},责任人:{{ fav_equipment.responsible_person.name }}</h6></a>
+                                <span class="fl">状态：<i class="key">{{ fav_equipment.status }}</i></span>
+                                <span class="fr">点击人数：{{ fav_equipment.click_nums }}</span>
+                                    <div class="des">
+                                       <span class="fr">校验日期：{{ fav_equipment.cal_date }}&nbsp;&nbsp;</span>
+                                    </div>
+                            </div>
+                            <div class="bottom">
+                                <span class="fl">{{ fav_equipment.team.name }}</span>
+                                <span class="delete-group fr jsDeleteFav_course" data-favid="{{ fav_equipment.id }}"></span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+

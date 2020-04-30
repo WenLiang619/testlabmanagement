@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% block title %}设备详情 - Test&Lab{% endblock %}
+{% load staticfiles %}
+{% block custom_bread %}
+    <section>
+	<div class="wp">
+		<div class="crumbs">
+			<ul>
+				<li><a href="{% url 'index' %}">首页</a>></li>
+                <li><a href="{% url 'equipments:equipment_list' %}">设备列表</a>></li>
+				<li>设备详情</li>
+			</ul>
+		</div>
+	</div>
+    </section>
+{% endblock %}
+
+{% block content %}
+    <section>
+	<div class="wp">
+		<div class="groupPurchase_detail detail">
+			<div class="toppro">
+				<div class="left">
+					<div class="picbox">
+						<div class="tb-booth tb-pic">    <!--CourseDetailView传过来的course 是Model中的Course类-->
+							<img width="440" height="445" src="{{ MEDIA_URL }}{{ equipment.image }}"  class="jqzoom"/>
+						</div>
+
+					</div>
+					<div class="des">
+						<h1 title=" ">{{ equipment.item }} - {{ equipment.name }}</h1>
+						<span class="key">{{ equipment.desc  }}</span>
+						<div class="prize">
+							<span class="fl">状态：<i class="key">{{ equipment.get_status_display }}</i></span>
+							<span class="fr">点击数：{{ equipment.click_nums  }}</span>
+						</div>
+						<ul class="parameter">
+							<li><span class="pram word3">位&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;置：</span><span>{{ equipment.location  }}</span></li>
+                            <li><span class="pram word3">资&nbsp;源&nbsp;数：</span><span>{{ equipment.get_resource_nums }}</span></li>
+                            <li><span class="pram word3">所属team：</span><span title="">{{ equipment.team.name }}</span></li>
+							<li class="piclist"><span class="pram word4">使用用户：</span>
+                                {% for user in equipment.get_borrow_users_distinct %}<!--course.get_learn_users是QuerySet类型，其中的元素是operation中的UserCourse对象-->
+                                    <span class="pic"><img width="40" height="40" src="{{ MEDIA_URL }}{{ user.image }}"/></span>
+                                    <span class="pram word3"></span><span title="">{{ user.nick_name }}</span>
+                                {% endfor %}
+                                {% for user in equipment.get_borrowinadvance_users_distinct %}<!--course.get_learn_users是QuerySet类型，其中的元素是operation中的UserCourse对象-->
+                                    <span class="pic"><img width="40" height="40" src="{{ MEDIA_URL }}{{ user.image }}"/></span>
+                                    <span class="pram word3"></span><span title="">{{ user.nick_name }}</span>
+                                {% endfor %}
+							</li>
+						</ul>
+						<div class="btns">
+							<div class="btn colectgroupbtn"  id="jsLeftBtn">
+                                  {% if has_fav_equipment %}已收藏{% else %}收藏{% endif %}
+                            </div>                                                                  <!--course是course\view中的CourseDetailView传过来的Course类实例-->
+                                <div class="buy btn"><a style="color: white" href="{% url 'equipments:equipment_info' equipment.id %}">设备信息</a></div>
+						</div>                           <!--这里的逻辑其实是course\view中的CourseDetailView传过来的Course类对象course到这里（http://127.0.0.1:8000/course/detail/10/）,点击'开始学习'取id传给course\view中的CourseInfoView，在CourseInfoView中根据id找到课程course传给course-video.html中使用（course-video.html中有<li><a href="">课程详情</a>></li>）-->
+					</div>
+                    <div class="group-share-box">
+                        <div class="bdsharebuttonbox"
+                             data-text="django开始了"
+                             data-desc="我在#慕课网#发现了"
+                             data-comment=""
+                             data-url="/group/groupdetail/15/">
+                            <span class="fl">分享到：</span>
+                            <a href="#" class="bds_more" data-cmd="more"></a>
+                            <a title="分享到QQ空间" href="#" class="bds_qzone" data-cmd="qzone"></a>
+                            <a title="分享到新浪微博" href="#" class="bds_tsina" data-cmd="tsina"></a>
+                            <a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq"></a>
+                            <a title="分享到人人网" href="#" class="bds_renren" data-cmd="renren"></a>
+                            <a title="分享到微信" href="#" class="bds_weixin" data-cmd="weixin"></a>
+                        </div>
+                    </div>
+				</div>
+				<div class="right">
+					<div class="head">
+						<h1>Team</h1>
+						<p>专业测试</p>
+					</div>
+					<div class="pic">
+                        <a href="{% url 'org:team_home' equipment.team.id %}"><!--与teacher-detail.html页面类似-->
+                            <img width="150" height="80" src="{{ MEDIA_URL }}{{ equipment.team.image }}"/>
+                        </a>
+                    </div>
+					<a href="{% url 'org:team_home' equipment.team.id %}">
+                        <h2 class="center" title="">team:{{ equipment.team.name }}</h2>
+                    </a>
+                    <p class="center tell">来自：{{ equipment.team.location }}</p>
+					<div class="btn  notlogin
+					     "data-favid="14" id="jsRightBtn">
+                         {% if has_fav_team %}已收藏{% else %}收藏{% endif %}
+                    </div>
+					<div class="clear">
+						<ul>
+                            <li>
+                                <span>设 &nbsp;备&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   {{ equipment.team.equipment_num }}</span>
+                            </li>
+                            <li>
+                                <span>工 &nbsp;&nbsp;程 &nbsp;&nbsp;师&nbsp;&nbsp;数：&nbsp;&nbsp;  {{ equipment.team.get_engineer_num }}</span>
+                            </li>
+							<li>所在地区：&nbsp;&nbsp;{{ equipment.team.location }}</li>
+							<li>认&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;证&nbsp;:
+                                &nbsp;&nbsp;
+								    <img title="金牌机构", src="{% static '/images/gold.png' %}"/>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+    </section>
+    <section>
+	<div class="wp">
+		<div class="list groupPurchase_detail_pro">
+			<div class="left layout">
+				<div class="head">
+					<ul class="tab_header">
+						<li class="active">设备详情</li>
+					</ul>
+				</div>
+				<div class="tab_cont tab_cont1">
+                    {% autoescape off %}
+                    {{ equipment.detail }}
+                    {% endautoescape %}
+				</div>
+				<div class="tab_cont tab_cont2" >
+					<div class="comment">
+						<div class="comenlist">
+
+	                    </div>
+					</div>
+				</div>
+			</div>
+			<div class="right layout">
+				<div class="head">相关设备推荐</div>
+                <div class="group_recommend">
+                    {% for relate_equipment in relate_equipments %} <!--courses\views\CourseDetailView传来的relate_courses里面的元素是courses\models中的Course类-->
+                        <dl>
+                            <dt>
+                                <a target="_blank" href="{% url 'equipments:equipment_detail' relate_equipment.id %}">
+                                    <img width="240" height="220" class="scrollLoading" src="{{ MEDIA_URL }}{{ relate_equipment.image }}"/>
+                                </a>
+                            </dt>
+                            <dd>
+                                <a target="_blank" href=""><h2> {{ relate_equipment.name }}</h2></a>
+                                <span class="fl">收藏数：<i class="key">{{ relate_equipment.fav_nums }}</i></span>
+                            </dd>
+                        </dl>
+                    {% endfor %}
+                </div>
+			</div>
+		</div>
+	</div>
+    </section>
+{% endblock %}
+
+{% block custom_js %}
+<script type="text/javascript">
+//收藏分享 与org_base.html相当，course-detail.html继承自base.html，这里的是本页面才有的custom_js。注意org_base.html是org-detal-course/desc/homepage/teachers.html的母版，所以js代码只需要在org_base.html中，因为四个子页面本身不需要自己的收藏功能，不需要custom_js。
+function add_fav(current_elem, fav_id, fav_type){
+    $.ajax({
+        cache: false,
+        type: "POST",
+        url: "{% url 'org:add_fav' %}",
+        {#<!--"/org/add_fav/"-->#}
+        data:{'fav_id':fav_id, 'fav_type':fav_type},
+        async: true,
+        beforeSend:function(xhr, settings){
+            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+        },
+        success: function(data) {
+            if(data.status == 'fail'){
+                if(data.msg == '用户未登录'){
+                    alert("请先登录。")
+                     window.location.href='/login/?next={{ request.path }}';
+                    {#window.location.href=//'/login/';#}
+                    {#    "{% url 'login' %}";#}
+                }else{
+                    alert(data.msg)
+                }
+
+            }else if(data.status == 'success'){
+                current_elem.text(data.msg)
+            }
+        },
+    });
+}
+
+$('#jsLeftBtn').on('click', function(){
+    add_fav($(this), {{ equipment.id }}, 1); //后台courses\View\CourseDetailView传过来的course
+});
+
+$('#jsRightBtn').on('click', function(){
+    add_fav($(this), {{ equipment.team.id }}, 2); //后台courses\View\CourseDetailView传过来的course
+});
+
+</script>
+
+{% endblock %}
+
